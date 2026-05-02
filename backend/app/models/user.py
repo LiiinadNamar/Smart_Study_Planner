@@ -31,6 +31,7 @@ class User(Base):
     # Relationships
     subjects = relationship("Subject", back_populates="user", cascade="all, delete-orphan")
     tasks = relationship("Task", back_populates="user", cascade="all, delete-orphan")
+    quiz_attempts = relationship("QuizAttempt", back_populates="user", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
         return f"<User {self.email}>"

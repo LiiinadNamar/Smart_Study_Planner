@@ -31,6 +31,7 @@ class Quiz(Base):
 
     # Relationships
     material = relationship("LearningMaterial", back_populates="quizzes")
+    attempts = relationship("QuizAttempt", back_populates="quiz", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
         return f"<Quiz {self.id} ({self.total_questions} questions)>"

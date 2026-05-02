@@ -172,3 +172,31 @@ export interface RoadmapResponse {
   roadmap: RoadmapStep[];
   tasks_created: number;
 }
+
+// ===== AI Materials List =====
+export interface MaterialSummaryItem {
+  id: string;
+  subject_id: string;
+  subject_title: string;
+  has_quiz: boolean;
+  quiz_id: string | null;
+  created_at: string;
+}
+
+// ===== Quiz Attempt =====
+export interface QuizAttemptCreate {
+  quiz_id: string;
+  score: number;
+  total: number;
+  answers: Record<string, number>;
+}
+
+export interface QuizAttempt {
+  id: string;
+  quiz_id: string;
+  user_id: string;
+  score: number;
+  total: number;
+  answers: Record<string, number>;
+  completed_at: string;
+}
