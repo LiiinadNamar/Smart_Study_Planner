@@ -200,3 +200,43 @@ export interface QuizAttempt {
   answers: Record<string, number>;
   completed_at: string;
 }
+
+// ===== Library =====
+export type LibraryItemType = "pdf" | "note" | "quiz" | "roadmap";
+
+export interface LibraryItem {
+  id: string;
+  user_id: string;
+  type: LibraryItemType;
+  title: string;
+  subject: string | null;
+  tags: string[] | null;
+  content: string | null;
+  file_path: string | null;
+  source_feature: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface LibraryItemCreate {
+  type: LibraryItemType;
+  title: string;
+  subject?: string;
+  tags?: string[];
+  content?: string;
+  file_path?: string;
+  source_feature?: string;
+}
+
+export interface LibraryItemUpdate {
+  title?: string;
+  subject?: string;
+  tags?: string[];
+}
+
+export interface LibraryFilter {
+  type?: LibraryItemType;
+  subject?: string;
+  tags?: string[];
+  sort?: "newest" | "oldest" | "az";
+}

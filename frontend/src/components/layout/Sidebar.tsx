@@ -5,25 +5,32 @@ import {
   BookOpen,
   CheckSquare,
   BarChart3,
+  Library,
   FileText,
   Brain,
   Map,
   LogOut,
   Sparkles,
+  X,
 } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
+
+interface SidebarProps {
+  onClose?: () => void;
+}
 
 const navItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/subjects", icon: BookOpen, label: "Subjects" },
   { to: "/tasks", icon: CheckSquare, label: "Tasks" },
   { to: "/grades", icon: BarChart3, label: "Grades" },
+  { to: "/library", icon: Library, label: "Library" },
   { to: "/materials", icon: FileText, label: "Materials" },
   { to: "/quizzes", icon: Brain, label: "Quizzes" },
   { to: "/roadmap", icon: Map, label: "Roadmap" },
 ];
 
-export const Sidebar: React.FC = () => {
+export const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
 
@@ -33,9 +40,9 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className="sticky top-0 h-screen w-64 shrink-0 glass-strong border-r border-surface-800 flex flex-col z-40">
+    <aside className="h-screen w-64 shrink-0 glass-strong border-r border-surface-800 flex flex-col z-50 bg-surface-950/95 backdrop-blur-xl">
       {/* Logo */}
-      <div className="p-6 border-b border-surface-800">
+      <div className="p-6 border-b border-surface-800 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
             <Sparkles size={20} className="text-white" />
@@ -45,6 +52,14 @@ export const Sidebar: React.FC = () => {
             <p className="text-xs text-surface-500">Smart Study Planner</p>
           </div>
         </div>
+        {onClose && (
+          <button 
+            onClick={onClose}
+            className="p-2 text-surface-400 hover:text-surface-100 rounded-lg hover:bg-surface-800/50 transition-colors"
+          >
+            <X size={20} />
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
@@ -54,6 +69,7 @@ export const Sidebar: React.FC = () => {
             key={item.to}
             to={item.to}
             end={item.to === "/"}
+            onClick={() => onClose?.()}
             className={({ isActive }) =>
               `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200
               ${

@@ -1,5 +1,6 @@
 """AI API routes — summarize, quiz generation, roadmap, quiz attempts."""
 
+import json
 import uuid
 from datetime import datetime, timedelta, timezone
 
@@ -27,6 +28,7 @@ from app.schemas.quiz import QuizResponse
 from app.schemas.quiz_attempt import QuizAttemptCreate, QuizAttemptResponse
 from app.services.ai_service import ai_service
 from app.services.file_service import file_service
+from app.services.library_service import library_service
 from app.utils.text_extraction import extract_text
 
 router = APIRouter(prefix="/ai", tags=["AI"])
@@ -148,6 +150,19 @@ async def summarize_material(
         subject_id=sid,
     )
     db.add(material)
+
+    # Auto-save into Library only when a file was uploaded (skip text-only summaries).
+    if file_url:
+        await library_service.save_item(
+            db,
+            current_user.id,
+            type="pdf",
+            title=(file.filename if file and file.filename else "upload.pdf"),
+            file_path=file_url,
+            content=summary,
+            source_feature="summarizer",
+        )
+
     await db.commit()
     await db.refresh(material)
 
@@ -188,6 +203,17 @@ async def generate_quiz(
         total_questions=len(questions),
     )
     db.add(quiz)
+
+    # Auto-save into Library.
+    await library_service.save_item(
+        db,
+        current_user.id,
+        type="quiz",
+        title=f"Quiz: {len(questions)} questions",
+        content=json.dumps(questions),
+        source_feature="quiz_generator",
+    )
+
     await db.commit()
     await db.refresh(quiz)
 
@@ -303,6 +329,16 @@ async def generate_roadmap(
             )
             db.add(task)
             tasks_created += 1
+
+    # Auto-save the generated roadmap into Library.
+    await library_service.save_item(
+        db,
+        current_user.id,
+        type="roadmap",
+        title=f"Roadmap: {data.goal}",
+        content=json.dumps(roadmap_steps),
+        source_feature="roadmap_generator",
+    )
 
     await db.commit()
 

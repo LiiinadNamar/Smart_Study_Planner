@@ -10,6 +10,7 @@ import { GradesPage } from "./features/grades/GradesPage";
 import { MaterialsPage } from "./features/materials/MaterialsPage";
 import { QuizPage } from "./features/quizzes/QuizPage";
 import { RoadmapPage } from "./features/roadmap/RoadmapPage";
+import { LibraryPage } from "./features/library/LibraryPage";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuthStore();
@@ -36,6 +37,7 @@ const App: React.FC = () => {
       <Route path="/subjects" element={<ProtectedRoute><SubjectsPage /></ProtectedRoute>} />
       <Route path="/tasks" element={<ProtectedRoute><TasksPage /></ProtectedRoute>} />
       <Route path="/grades" element={<ProtectedRoute><GradesPage /></ProtectedRoute>} />
+      <Route path="/library" element={<ProtectedRoute><LibraryPage /></ProtectedRoute>} />
       <Route path="/materials" element={<ProtectedRoute><MaterialsPage /></ProtectedRoute>} />
       <Route path="/quizzes" element={<ProtectedRoute><QuizPage /></ProtectedRoute>} />
       <Route path="/roadmap" element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
