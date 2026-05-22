@@ -6,7 +6,7 @@ import { Button } from "../../components/ui/Button";
 import { useSubjectStore } from "../../store/subjectStore";
 import api from "../../services/api";
 import toast from "react-hot-toast";
-import type { SummarizeResponse, MaterialSummaryItem } from "../../types";
+import type { SummarizeResponse, MaterialSummaryItem, LearningMaterial } from "../../types";
 import { useNavigate } from "react-router-dom";
 
 export const MaterialsPage: React.FC = () => {
@@ -19,6 +19,7 @@ export const MaterialsPage: React.FC = () => {
   const [activeSummary, setActiveSummary] = useState<string | null>(null);
   const [activeMaterialId, setActiveMaterialId] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [loadingPastId, setLoadingPastId] = useState<string | null>(null);
 
   // Past materials
   const [materials, setMaterials] = useState<MaterialSummaryItem[]>([]);
@@ -79,6 +80,25 @@ export const MaterialsPage: React.FC = () => {
 
   const handleGoToQuiz = () => {
     if (activeMaterialId) navigate("/quizzes", { state: { materialId: activeMaterialId } });
+  };
+
+  const handleOpenPastMaterial = async (materialId: string) => {
+    setLoadingPastId(materialId);
+    try {
+      const res = await api.get<LearningMaterial>(`/ai/materials/${materialId}`);
+      if (!res.data.ai_summary) {
+        toast.error("No saved summary found for this material");
+        return;
+      }
+      setActiveSummary(res.data.ai_summary);
+      setActiveMaterialId(res.data.id);
+      // Sync subject dropdown (helps if user wants to re-run summarize / upload next)
+      setSelectedSubject(res.data.subject_id);
+    } catch (err: any) {
+      toast.error(err.response?.data?.detail || "Failed to load saved summary");
+    } finally {
+      setLoadingPastId(null);
+    }
   };
 
   return (
@@ -161,18 +181,36 @@ export const MaterialsPage: React.FC = () => {
             ) : (
               <div className="space-y-2">
                 {materials.map((m) => (
-                  <div key={m.id} className="flex items-center justify-between p-3 rounded-xl bg-surface-800/50 border border-surface-700 hover:border-surface-600 transition-colors">
+                  <div
+                    key={m.id}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => handleOpenPastMaterial(m.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") handleOpenPastMaterial(m.id);
+                    }}
+                    className="flex items-center justify-between p-3 rounded-xl bg-surface-800/50 border border-surface-700 hover:border-surface-600 transition-colors cursor-pointer"
+                    title="Open saved summary"
+                  >
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-surface-200 truncate">{m.subject_title}</p>
                       <p className="text-xs text-surface-500">{new Date(m.created_at).toLocaleDateString()}</p>
                       {m.has_quiz && <span className="text-xs text-emerald-400 font-medium">✓ Quiz ready</span>}
                     </div>
                     <button
-                      onClick={() => navigate("/quizzes", { state: { materialId: m.id } })}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate("/quizzes", { state: { materialId: m.id } });
+                      }}
                       className="ml-2 p-1.5 rounded-lg hover:bg-surface-700 text-surface-400 hover:text-primary-400 transition-colors flex-shrink-0"
                       title="Go to quiz"
+                      disabled={loadingPastId === m.id}
                     >
-                      <ChevronRight size={16} />
+                      {loadingPastId === m.id ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : (
+                        <ChevronRight size={16} />
+                      )}
                     </button>
                   </div>
                 ))}

@@ -24,6 +24,7 @@ from app.schemas.ai import (
     RoadmapRequest,
     RoadmapResponse,
 )
+from app.schemas.learning_material import MaterialResponse
 from app.schemas.quiz import QuizResponse
 from app.schemas.quiz_attempt import QuizAttemptCreate, QuizAttemptResponse
 from app.services.ai_service import ai_service
@@ -88,6 +89,34 @@ async def list_materials(
         ))
 
     return items
+
+
+# ─────────────────────────────────────────
+# GET /ai/materials/{material_id}  — fetch a saved material (incl. summary)
+# ─────────────────────────────────────────
+
+@router.get("/materials/{material_id}", response_model=MaterialResponse)
+async def get_material(
+    material_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Fetch a single learning material (ownership enforced).
+
+    Useful for reopening a previously generated summary in the UI.
+    """
+    stmt = (
+        select(LearningMaterial)
+        .join(Subject, Subject.id == LearningMaterial.subject_id)
+        .where(LearningMaterial.id == material_id, Subject.user_id == current_user.id)
+        .limit(1)
+    )
+    result = await db.execute(stmt)
+    material = result.scalar_one_or_none()
+    if not material:
+        raise HTTPException(status_code=404, detail="Learning material not found")
+
+    return material
 
 
 # ─────────────────────────────────────────
