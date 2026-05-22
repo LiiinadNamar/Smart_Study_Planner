@@ -71,6 +71,3 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
     </div>
   );
 };
-    </div>
-  );
-};
