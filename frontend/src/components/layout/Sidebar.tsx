@@ -44,7 +44,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onClose, collapsed = false }) 
     <aside
       className={
         `h-screen shrink-0 glass-strong border-r border-surface-800 flex flex-col z-50 ` +
-        `bg-surface-950/95 backdrop-blur-xl overflow-hidden transition-[width] duration-300 ` +
+        `overflow-hidden transition-[width] duration-300 ` +
         (collapsed ? "w-20" : "w-64")
       }
     >
@@ -98,8 +98,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ onClose, collapsed = false }) 
               (collapsed ? "justify-center px-3 py-3" : "gap-3 px-4 py-3") +
               ` ${
                 isActive
-                  ? "bg-primary-600/20 text-primary-400 border border-primary-500/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
-                  : "text-surface-400 hover:text-surface-100 hover:bg-surface-800/50"
+                  ? "bg-primary-500/10 text-surface-100 border border-primary-500/20"
+                  : "text-surface-400 hover:text-surface-100 hover:bg-surface-900"
               }`
             }
           >
@@ -134,7 +134,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onClose, collapsed = false }) 
           aria-label="Log out"
           title="Log out"
           className={
-            "flex items-center rounded-xl text-sm text-surface-400 hover:text-red-400 hover:bg-red-500/10 transition-colors w-full cursor-pointer " +
+            "flex items-center rounded-xl text-sm text-surface-400 hover:text-danger hover:bg-danger/10 transition-colors w-full cursor-pointer " +
             (collapsed ? "justify-center px-3 py-2.5" : "gap-3 px-4 py-2.5")
           }
         >

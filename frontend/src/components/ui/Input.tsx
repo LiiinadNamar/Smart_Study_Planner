@@ -35,18 +35,18 @@ export const Input: React.FC<InputProps> = ({
         <input
           id={inputId}
           className={`
-            w-full rounded-xl bg-surface-800/50 border border-surface-700
+            w-full rounded-xl bg-surface-900/60 border border-surface-800
             text-surface-100 placeholder-surface-500
-            focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 focus:outline-none
+            focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none
             transition-all duration-200
             ${icon ? "pl-10" : "pl-4"} pr-4 py-2.5 text-sm
-            ${error ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" : ""}
+            ${error ? "border-danger focus:border-danger focus:ring-danger/20" : ""}
             ${className}
           `}
           {...props}
         />
       </div>
-      {error && <p className="text-xs text-red-400 mt-1">{error}</p>}
+      {error && <p className="text-xs text-danger mt-1">{error}</p>}
     </div>
   );
 };

@@ -214,7 +214,7 @@ export const QuizPage: React.FC = () => {
             <Card className="mb-6 animate-fade-in">
               <div className="flex items-center justify-between flex-wrap gap-4">
                 <div className="flex items-center gap-4">
-                  <Trophy size={28} className="text-yellow-400" />
+                  <Trophy size={28} className="text-accent-500" />
                   <div>
                     <p className="text-2xl font-bold gradient-text">{score}/{questions.length}</p>
                     <p className="text-sm text-surface-400">
@@ -229,7 +229,7 @@ export const QuizPage: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <div className="w-36 h-3 rounded-full bg-surface-800 overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-primary-500 to-emerald-400 transition-all duration-700"
+                      className="h-full rounded-full bg-gradient-to-r from-primary-500 to-success transition-all duration-700"
                       style={{ width: `${(score / questions.length) * 100}%` }}
                     />
                   </div>
@@ -254,8 +254,8 @@ export const QuizPage: React.FC = () => {
                     const isSelected = answers[qi] === oi;
                     const isCorrect = q.correct_index === oi;
                     let cls = "border-surface-700 hover:border-surface-600";
-                    if (showResults && isCorrect) cls = "border-emerald-500 bg-emerald-500/10";
-                    else if (showResults && isSelected && !isCorrect) cls = "border-red-500 bg-red-500/10";
+                    if (showResults && isCorrect) cls = "border-success/40 bg-success/10";
+                    else if (showResults && isSelected && !isCorrect) cls = "border-danger/40 bg-danger/10";
                     else if (isSelected) cls = "border-primary-500 bg-primary-500/10";
 
                     return (
@@ -266,9 +266,9 @@ export const QuizPage: React.FC = () => {
                       >
                         <span className="w-6 h-6 rounded-full border border-current flex items-center justify-center text-xs flex-shrink-0">
                           {showResults && isCorrect
-                            ? <CheckCircle size={14} className="text-emerald-400" />
+                            ? <CheckCircle size={14} className="text-success" />
                             : showResults && isSelected
-                            ? <XCircle size={14} className="text-red-400" />
+                            ? <XCircle size={14} className="text-danger" />
                             : String.fromCharCode(65 + oi)}
                         </span>
                         <span className="text-surface-200">{opt}</span>
@@ -318,7 +318,7 @@ export const QuizPage: React.FC = () => {
                   <div className="flex items-center gap-3">
                     <div className="w-24 h-2 rounded-full bg-surface-700 overflow-hidden">
                       <div
-                        className={`h-full rounded-full ${pct >= 70 ? "bg-emerald-400" : pct >= 50 ? "bg-yellow-400" : "bg-red-400"}`}
+                        className={`h-full rounded-full ${pct >= 70 ? "bg-success" : pct >= 50 ? "bg-warning" : "bg-danger"}`}
                         style={{ width: `${pct}%` }}
                       />
                     </div>

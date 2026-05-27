@@ -14,13 +14,13 @@ interface LibraryCardProps {
 function getTypeMeta(type: LibraryItem["type"]) {
   switch (type) {
     case "pdf":
-      return { label: "PDF", icon: FileText, cls: "text-blue-400 bg-blue-500/10 border-blue-500/20" };
+      return { label: "PDF", icon: FileText, cls: "text-surface-200 bg-surface-800/40 border-surface-700" };
     case "quiz":
-      return { label: "Quiz", icon: Brain, cls: "text-purple-400 bg-purple-500/10 border-purple-500/20" };
+      return { label: "Quiz", icon: Brain, cls: "text-accent-500 bg-accent-500/10 border-accent-500/20" };
     case "roadmap":
-      return { label: "Roadmap", icon: Map, cls: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" };
+      return { label: "Roadmap", icon: Map, cls: "text-primary-400 bg-primary-500/10 border-primary-500/20" };
     case "note":
-      return { label: "Note", icon: StickyNote, cls: "text-amber-400 bg-amber-500/10 border-amber-500/20" };
+      return { label: "Note", icon: StickyNote, cls: "text-surface-200 bg-surface-800/40 border-surface-700" };
   }
 }
 

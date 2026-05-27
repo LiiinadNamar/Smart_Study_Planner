@@ -67,15 +67,15 @@ export const RoadmapPage: React.FC = () => {
       {roadmap.length > 0 && (
         <div>
           {tasksCreated > 0 && (
-            <div className="mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-3">
-              <CheckSquare size={18} className="text-emerald-400" />
-              <span className="text-sm text-emerald-400">{tasksCreated} tasks have been automatically added to your planner!</span>
+            <div className="mb-6 p-4 rounded-xl bg-success/10 border border-success/20 flex items-center gap-3">
+              <CheckSquare size={18} className="text-success" />
+              <span className="text-sm text-success">{tasksCreated} tasks have been automatically added to your planner!</span>
             </div>
           )}
 
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-500 via-accent-400 to-emerald-400" />
+            <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-500 via-accent-400 to-primary-400" />
 
             <div className="space-y-6">
               {roadmap.map((step, i) => (

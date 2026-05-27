@@ -21,13 +21,13 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variants: Record<string, string> = {
     primary:
-      "bg-gradient-to-r from-accent-600 to-accent-500 text-white hover:from-accent-500 hover:to-accent-400 focus:ring-accent-500 shadow-lg shadow-accent-500/20",
+      "bg-primary-600 text-white hover:bg-primary-500 focus:ring-primary-400 shadow-sm shadow-primary-600/20",
     secondary:
-      "bg-surface-800 text-surface-200 border border-surface-700 hover:bg-surface-700 hover:border-surface-600 focus:ring-surface-500",
+      "bg-surface-900 text-surface-100 border border-surface-800 hover:bg-surface-850 hover:border-surface-700 focus:ring-primary-400",
     danger:
-      "bg-red-600 text-white hover:bg-red-500 focus:ring-red-500",
+      "bg-danger text-white hover:bg-danger/90 focus:ring-danger/50",
     ghost:
-      "bg-transparent text-surface-300 hover:bg-surface-800 hover:text-surface-100 focus:ring-surface-600",
+      "bg-transparent text-surface-200 hover:bg-surface-900 hover:text-surface-100 focus:ring-primary-400",
   };
 
   const sizes: Record<string, string> = {

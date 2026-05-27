@@ -195,7 +195,7 @@ export const MaterialsPage: React.FC = () => {
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-surface-200 truncate">{m.subject_title}</p>
                       <p className="text-xs text-surface-500">{new Date(m.created_at).toLocaleDateString()}</p>
-                      {m.has_quiz && <span className="text-xs text-emerald-400 font-medium">✓ Quiz ready</span>}
+                      {m.has_quiz && <span className="text-xs text-success font-medium">✓ Quiz ready</span>}
                     </div>
                     <button
                       onClick={(e) => {
@@ -246,7 +246,7 @@ export const MaterialsPage: React.FC = () => {
                         onClick={handleCopyId}
                         className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-surface-700 hover:bg-surface-600 text-surface-200 transition-colors"
                       >
-                        {copied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                        {copied ? <Check size={12} className="text-success" /> : <Copy size={12} />}
                         {copied ? "Copied!" : "Copy ID"}
                       </button>
                       <button

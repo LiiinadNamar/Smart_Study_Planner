@@ -191,8 +191,8 @@ export const GradesPage: React.FC = () => {
                       <span
                         className={`font-bold ${
                           forecast.is_achievable
-                            ? "text-emerald-400"
-                            : "text-red-400"
+                            ? "text-success"
+                            : "text-danger"
                         }`}
                       >
                         {forecast.required_score}%
@@ -204,8 +204,8 @@ export const GradesPage: React.FC = () => {
                 <div
                   className={`p-3 rounded-xl text-xs ${
                     forecast.is_achievable
-                      ? "bg-emerald-500/10 text-emerald-400"
-                      : "bg-red-500/10 text-red-400"
+                      ? "bg-success/10 text-success"
+                      : "bg-danger/10 text-danger"
                   }`}
                 >
                   {forecast.message}
@@ -221,7 +221,7 @@ export const GradesPage: React.FC = () => {
                   <div className="h-2 rounded-full bg-surface-800 overflow-hidden relative">
                     {/* Target marker */}
                     <div
-                      className="absolute top-0 bottom-0 w-0.5 bg-amber-400 z-10"
+                      className="absolute top-0 bottom-0 w-0.5 bg-accent-500 z-10"
                       style={{
                         left: `${forecast.target_grade}%`,
                       }}
@@ -229,8 +229,8 @@ export const GradesPage: React.FC = () => {
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
                         forecast.is_achievable
-                          ? "bg-gradient-to-r from-primary-500 to-emerald-400"
-                          : "bg-gradient-to-r from-primary-500 to-red-400"
+                          ? "bg-gradient-to-r from-primary-500 to-success"
+                          : "bg-gradient-to-r from-primary-500 to-danger"
                       }`}
                       style={{
                         width: `${Math.min(
@@ -252,7 +252,7 @@ export const GradesPage: React.FC = () => {
           {/* Grades Table */}
           <Card className="lg:col-span-2 animate-fade-in">
             <div className="flex items-center gap-2 mb-4">
-              <Target size={18} className="text-emerald-400" />
+              <Target size={18} className="text-accent-500" />
               <h3 className="font-semibold text-surface-100">
                 Grade Entries
               </h3>
@@ -301,10 +301,10 @@ export const GradesPage: React.FC = () => {
                           <span
                             className={`font-medium ${
                               grade.score >= 70
-                                ? "text-emerald-400"
+                                ? "text-success"
                                 : grade.score >= 50
-                                ? "text-amber-400"
-                                : "text-red-400"
+                                ? "text-warning"
+                                : "text-danger"
                             }`}
                           >
                             {grade.score}%
@@ -319,7 +319,7 @@ export const GradesPage: React.FC = () => {
                         <td className="py-3 px-2">
                           <button
                             onClick={() => handleDelete(grade.id)}
-                            className="p-1 rounded text-surface-500 hover:text-red-400 transition-colors cursor-pointer"
+                            className="p-1 rounded text-surface-500 hover:text-danger transition-colors cursor-pointer"
                           >
                             <Trash2 size={14} />
                           </button>

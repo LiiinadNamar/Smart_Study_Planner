@@ -53,7 +53,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
       {/* Mobile overlay */}
       {isSidebarOpen && !isDesktop && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity md:hidden"
+          className="fixed inset-0 bg-surface-950/80 z-40 transition-opacity md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}

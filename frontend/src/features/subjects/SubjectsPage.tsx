@@ -114,7 +114,7 @@ export const SubjectsPage: React.FC = () => {
                   </button>
                   <button
                     onClick={() => handleDelete(subject.id)}
-                    className="p-1.5 rounded-lg text-surface-400 hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                    className="p-1.5 rounded-lg text-surface-400 hover:text-danger hover:bg-danger/10 transition-colors cursor-pointer"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -122,14 +122,14 @@ export const SubjectsPage: React.FC = () => {
               </div>
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm">
-                  <Target size={16} className="text-emerald-400" />
+                  <Target size={16} className="text-primary-400" />
                   <span className="text-surface-300">Target Grade:</span>
                   <span className="font-semibold text-surface-100">
                     {subject.target_grade}%
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <Clock size={16} className="text-amber-400" />
+                  <Clock size={16} className="text-accent-500" />
                   <span className="text-surface-300">Credit Hours:</span>
                   <span className="font-semibold text-surface-100">
                     {subject.credit_hours}

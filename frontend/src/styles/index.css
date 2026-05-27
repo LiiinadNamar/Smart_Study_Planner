@@ -2,32 +2,42 @@
 
 /* ===== Custom Design System ===== */
 @theme {
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-200: #bfdbfe;
-  --color-primary-300: #93c5fd;
-  --color-primary-400: #60a5fa;
-  --color-primary-500: #3b82f6; /* Keep blue/indigo-ish for primary brand elements */
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-primary-800: #1e40af;
-  --color-primary-900: #1e3a8a;
+  /* Direction C (Warm Learning) — Warm-dark */
 
-  --color-accent-400: #34d399; /* Emerald/Green accents as recommended CTA */
-  --color-accent-500: #10b981;
-  --color-accent-600: #059669;
+  /* Brand (primary): calm teal/sage */
+  --color-primary-50: #f0fdfa;
+  --color-primary-100: #ccfbf1;
+  --color-primary-200: #99f6e4;
+  --color-primary-300: #5eead4;
+  --color-primary-400: #2dd4bf;
+  --color-primary-500: #14b8a6;
+  --color-primary-600: #0d9488;
+  --color-primary-700: #0f766e;
+  --color-primary-800: #115e59;
+  --color-primary-900: #134e4a;
 
-  --color-surface-50: #f8fafc;
-  --color-surface-100: #f1f5f9;
-  --color-surface-200: #e2e8f0;
-  --color-surface-700: #334155;
-  --color-surface-800: #1e293b; /* Secondary */
-  --color-surface-850: #172033;
-  --color-surface-900: #0f172a; /* Primary Dark */
-  --color-surface-950: #020617; /* Deep Background */
+  /* Accent: warm honey highlight (used sparingly) */
+  --color-accent-400: #fcd34d;
+  --color-accent-500: #fbbf24;
+  --color-accent-600: #f59e0b;
 
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
+  /* Neutral surfaces: espresso/charcoal scale (NOTE: must include 300/400/500/600; used across UI) */
+  --color-surface-50: #f7f2ee;
+  --color-surface-100: #efe8e3;
+  --color-surface-200: #d9cec6;
+  --color-surface-300: #b6a397;
+  --color-surface-400: #8b7667;
+  --color-surface-500: #6a584b;
+  --color-surface-600: #4a3d35;
+  --color-surface-700: #332b26;
+  --color-surface-800: #26201c;
+  --color-surface-850: #1e1916;
+  --color-surface-900: #171311;
+  --color-surface-950: #0f0d0b;
+
+  /* Semantic status roles */
+  --color-success: #22c55e;
+  --color-warning: #f97316;
   --color-danger: #ef4444;
 
   --font-sans: "Open Sans", system-ui, -apple-system, sans-serif;
@@ -69,24 +79,21 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent-500);
+  background: var(--color-primary-500);
 }
 
 /* ===== Glass Card ===== */
 .glass {
-  background: rgba(30, 41, 59, 0.4);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  /* Soft panel (keeps class name for compatibility) */
+  background-color: var(--color-surface-900);
+  border: 1px solid var(--color-surface-800);
+  box-shadow: none;
 }
 
 .glass-strong {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  background-color: var(--color-surface-850);
+  border: 1px solid var(--color-surface-800);
+  box-shadow: none;
 }
 
 /* ===== Gradient Text ===== */
@@ -109,8 +116,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.15); }
-  50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.35); }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.92; }
 }
 
 .animate-fade-in {
@@ -133,9 +140,9 @@ h1, h2, h3, h4, h5, h6 {
 .stagger-5 { animation-delay: 500ms; }
 
 /* ===== Priority Badge Colors ===== */
-.priority-1 { background-color: var(--color-danger); box-shadow: 0 0 8px var(--color-danger); }
-.priority-2 { background-color: var(--color-warning); box-shadow: 0 0 8px var(--color-warning); }
-.priority-3 { background-color: var(--color-success); box-shadow: 0 0 8px var(--color-success); }
+.priority-1 { background-color: var(--color-danger); }
+.priority-2 { background-color: var(--color-warning); }
+.priority-3 { background-color: var(--color-success); }
 
 /* ===== Status Badge Colors ===== */
 .status-todo { background-color: var(--color-surface-700); }

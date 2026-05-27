@@ -16,10 +16,10 @@ const typeOptions: Array<{
   cls: string;
 }> = [
   { label: "All", value: undefined, icon: ArrowUpDown, cls: "text-surface-300" },
-  { label: "PDF", value: "pdf", icon: FileText, cls: "text-blue-400" },
-  { label: "Quiz", value: "quiz", icon: Brain, cls: "text-purple-400" },
-  { label: "Roadmap", value: "roadmap", icon: Map, cls: "text-emerald-400" },
-  { label: "Note", value: "note", icon: StickyNote, cls: "text-amber-400" },
+  { label: "PDF", value: "pdf", icon: FileText, cls: "text-surface-300" },
+  { label: "Quiz", value: "quiz", icon: Brain, cls: "text-surface-300" },
+  { label: "Roadmap", value: "roadmap", icon: Map, cls: "text-surface-300" },
+  { label: "Note", value: "note", icon: StickyNote, cls: "text-surface-300" },
 ];
 
 export const LibraryFilters: React.FC<LibraryFiltersProps> = ({ items, filters, onChange }) => {
@@ -92,7 +92,7 @@ export const LibraryFilters: React.FC<LibraryFiltersProps> = ({ items, filters, 
                   className={
                     `px-3 py-1.5 rounded-xl border text-xs transition-colors cursor-pointer ` +
                     (active
-                      ? "bg-accent-500/15 text-accent-300 border-accent-500/30"
+                      ? "bg-accent-500/15 text-accent-400 border-accent-500/30"
                       : "bg-surface-800/40 text-surface-300 border-surface-700 hover:border-surface-600")
                   }
                   title={tag}

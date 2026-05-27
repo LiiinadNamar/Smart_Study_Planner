@@ -57,7 +57,7 @@ export const LibraryPage: React.FC = () => {
               <p className="text-surface-400">Loading your library…</p>
             </div>
           ) : error ? (
-            <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+            <div className="p-4 rounded-xl bg-danger/10 border border-danger/20 text-danger text-sm">
               {error}
             </div>
           ) : items.length === 0 ? (

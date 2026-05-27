@@ -14,13 +14,13 @@ import type { TaskStatus } from "../../types";
 const columns: { status: TaskStatus; label: string; color: string }[] = [
   { status: "todo", label: "To Do", color: "bg-surface-600" },
   { status: "doing", label: "In Progress", color: "bg-primary-600" },
-  { status: "done", label: "Done", color: "bg-emerald-600" },
+  { status: "done", label: "Done", color: "bg-success" },
 ];
 
 const priorityLabels: Record<number, { label: string; class: string }> = {
-  1: { label: "High", class: "bg-red-500/20 text-red-400" },
-  2: { label: "Medium", class: "bg-amber-500/20 text-amber-400" },
-  3: { label: "Low", class: "bg-emerald-500/20 text-emerald-400" },
+  1: { label: "High", class: "bg-danger/20 text-danger" },
+  2: { label: "Medium", class: "bg-warning/20 text-warning" },
+  3: { label: "Low", class: "bg-success/20 text-success" },
 };
 
 export const TasksPage: React.FC = () => {
@@ -239,7 +239,7 @@ export const TasksPage: React.FC = () => {
                               e.stopPropagation();
                               handleDelete(task.id);
                             }}
-                            className="p-1 rounded text-surface-400 hover:text-red-400 hover:bg-red-500/10 cursor-pointer"
+                            className="p-1 rounded text-surface-400 hover:text-danger hover:bg-danger/10 cursor-pointer"
                           >
                             <Trash2 size={14} />
                           </button>

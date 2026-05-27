@@ -326,6 +326,30 @@ class AIService:
 
 ### Phase 3: Frontend Application
 
+#### Design System — Direction C (Warm Learning)
+
+Design goal: **warm-dark** learning UI (espresso neutrals + calm teal primary + honey accent), with a **minimal palette**.
+
+Source of truth:
+- Tokens live in `frontend/src/styles/index.css` under `@theme` (Tailwind v4 CSS-first).
+
+Color roles:
+- **Primary**: `primary-*` (teal/sage) — main actions, focus rings, links, progress.
+- **Accent**: `accent-400/500/600` (honey) — small highlights, badges, decorative gradients.
+- **Surfaces**: `surface-50..950` + `surface-850` — all page backgrounds, panels, borders, muted text.
+- **Status**: `success`, `warning`, `danger` — semantic feedback only (done/success, caution, destructive).
+
+Rules:
+- Avoid Tailwind named palettes (`amber-*`, `emerald-*`, `red-*`, `blue-*`, `purple-*`, etc.). Use tokens only.
+- No subject-specific palettes. Prefer `surface-*` + `primary`/`accent` sparingly.
+- Prefer solid/surface panels over heavy blur/glow; keep effects subtle.
+
+Component conventions:
+- Buttons: `primary` = solid primary, `secondary` = surface button, `danger` = semantic danger.
+- Inputs: focus uses `primary`; errors use `danger`; backgrounds/borders are `surface-*`.
+- Cards/Modals: use `surface-*` backgrounds + `surface-*` borders; backdrop uses `surface-950/80`.
+- Badges: priority/status use `.priority-*` / `.status-*` classes (mapped to semantic tokens).
+
 #### [NEW] Frontend scaffold with Vite + React + TypeScript + Tailwind CSS v4
 
 Key pages and components:

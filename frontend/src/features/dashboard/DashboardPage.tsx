@@ -48,25 +48,25 @@ export const DashboardPage: React.FC = () => {
       label: "Subjects",
       value: subjects.length,
       icon: BookOpen,
-      color: "from-primary-500 to-primary-600",
+      color: "bg-primary-600",
     },
     {
       label: "Active Tasks",
       value: todoTasks.length + doingTasks.length,
       icon: CheckSquare,
-      color: "from-amber-500 to-orange-600",
+      color: "bg-warning",
     },
     {
       label: "Completed",
       value: doneTasks.length,
       icon: BarChart3,
-      color: "from-emerald-500 to-green-600",
+      color: "bg-success",
     },
     {
       label: "Overdue",
       value: overdueTasks.length,
       icon: AlertTriangle,
-      color: "from-red-500 to-rose-600",
+      color: "bg-danger",
     },
   ];
 
@@ -78,7 +78,7 @@ export const DashboardPage: React.FC = () => {
           <Card key={i} className={`animate-fade-in stagger-${i + 1}`} hover>
             <div className="flex items-center gap-4">
               <div
-                className={`w-12 h-12 shrink-0 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg`}
+                className={`w-12 h-12 shrink-0 rounded-xl ${stat.color} flex items-center justify-center shadow-sm`}
               >
                 <stat.icon size={22} className="text-white shrink-0" />
               </div>
