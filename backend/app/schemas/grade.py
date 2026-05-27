@@ -5,10 +5,12 @@ from datetime import date, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.schemas.grade_method import GradeMethodResponse
+
 
 class GradeCreate(BaseModel):
     score: float = Field(..., ge=0, le=100)
-    weight: float = Field(..., gt=0, le=100, description="Weight as percentage, e.g. 30")
+    method_id: uuid.UUID
     label: str | None = Field(default=None, max_length=255)
     date: date
     subject_id: uuid.UUID
@@ -18,6 +20,8 @@ class GradeResponse(BaseModel):
     id: uuid.UUID
     score: float
     weight: float
+    method_id: uuid.UUID | None
+    method: GradeMethodResponse | None = None
     label: str | None
     date: date
     subject_id: uuid.UUID

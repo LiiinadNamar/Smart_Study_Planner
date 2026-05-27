@@ -27,12 +27,20 @@ class Grade(Base):
     subject_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("subjects.id", ondelete="CASCADE"), index=True, nullable=False
     )
+    method_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("grade_methods.id", ondelete="SET NULL"),
+        index=True,
+        nullable=True,
+        comment="Assessment method/category used to calculate grade weight",
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
 
     # Relationships
     subject = relationship("Subject", back_populates="grades")
+    method = relationship("GradeMethod", back_populates="grades")
 
     def __repr__(self) -> str:
         return f"<Grade {self.label}: {self.score} ({self.weight}%)>"

@@ -33,6 +33,9 @@ class Subject(Base):
     user = relationship("User", back_populates="subjects")
     tasks = relationship("Task", back_populates="subject", cascade="all, delete-orphan")
     grades = relationship("Grade", back_populates="subject", cascade="all, delete-orphan")
+    grade_methods = relationship(
+        "GradeMethod", back_populates="subject", cascade="all, delete-orphan"
+    )
     materials = relationship("LearningMaterial", back_populates="subject", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:

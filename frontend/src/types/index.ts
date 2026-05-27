@@ -85,10 +85,28 @@ export interface TaskUpdate {
 }
 
 // ===== Grade =====
+export interface GradeMethod {
+  id: string;
+  subject_id: string;
+  name: string;
+  weight_percent: number;
+  planned_count: number;
+  created_at: string;
+}
+
+export interface GradeMethodCreate {
+  subject_id: string;
+  name: string;
+  weight_percent: number;
+  planned_count: number;
+}
+
 export interface Grade {
   id: string;
   score: number;
   weight: number;
+  method_id: string | null;
+  method: GradeMethod | null;
   label: string | null;
   date: string;
   subject_id: string;
@@ -97,7 +115,7 @@ export interface Grade {
 
 export interface GradeCreate {
   score: number;
-  weight: number;
+  method_id: string;
   label?: string;
   date: string;
   subject_id: string;

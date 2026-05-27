@@ -34,7 +34,7 @@ async def create_grade(
     try:
         return await grade_service.create(db, data, current_user.id)
     except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.delete("/{grade_id}", status_code=status.HTTP_204_NO_CONTENT)

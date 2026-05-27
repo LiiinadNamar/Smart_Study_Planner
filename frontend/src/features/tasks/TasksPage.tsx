@@ -27,16 +27,36 @@ export const TasksPage: React.FC = () => {
   const { tasks, isLoading, fetch, create, update, remove } = useTaskStore();
   const { subjects, fetch: fetchSubjects } = useSubjectStore();
   const [showModal, setShowModal] = useState(false);
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
   const [priority, setPriority] = useState("2");
   const [subjectId, setSubjectId] = useState("");
 
+  const editingTask = tasks.find((t) => t.id === editingTaskId) || null;
+
+  const [editDescription, setEditDescription] = useState("");
+  const [editDeadline, setEditDeadline] = useState("");
+  const [editPriority, setEditPriority] = useState("2");
+  const [editStatus, setEditStatus] = useState<TaskStatus>("todo");
+
   useEffect(() => {
     fetch();
     fetchSubjects();
   }, []);
+
+  useEffect(() => {
+    if (!editingTask) return;
+    setEditDescription(editingTask.description || "");
+    setEditDeadline(
+      editingTask.deadline
+        ? format(new Date(editingTask.deadline), "yyyy-MM-dd'T'HH:mm")
+        : ""
+    );
+    setEditPriority(String(editingTask.priority));
+    setEditStatus(editingTask.status);
+  }, [editingTask]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,6 +94,27 @@ export const TasksPage: React.FC = () => {
       toast.success("Task deleted");
     } catch {
       toast.error("Failed to delete task");
+    }
+  };
+
+  const handleOpenEdit = (taskId: string) => {
+    setEditingTaskId(taskId);
+  };
+
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingTask) return;
+    try {
+      await update(editingTask.id, {
+        description: editDescription || undefined,
+        deadline: editDeadline ? new Date(editDeadline).toISOString() : undefined,
+        priority: parseInt(editPriority, 10),
+        status: editStatus,
+      });
+      toast.success("Task updated");
+      setEditingTaskId(null);
+    } catch (err: any) {
+      toast.error(err.response?.data?.detail || "Failed to update task");
     }
   };
 
@@ -117,7 +158,8 @@ export const TasksPage: React.FC = () => {
                     return (
                       <Card
                         key={task.id}
-                        className="animate-fade-in !p-4 relative group"
+                        className="animate-fade-in !p-4 relative group cursor-pointer"
+                        onClick={() => handleOpenEdit(task.id)}
                       >
                         <div className="flex items-start gap-2">
                           <GripVertical
@@ -164,12 +206,13 @@ export const TasksPage: React.FC = () => {
                         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
                           {col.status !== "todo" && (
                             <button
-                              onClick={() =>
+                              onClick={(e) => {
+                                e.stopPropagation();
                                 handleStatusChange(
                                   task.id,
                                   col.status === "done" ? "doing" : "todo"
-                                )
-                              }
+                                );
+                              }}
                               className="p-1 rounded text-xs text-surface-400 hover:bg-surface-700 cursor-pointer"
                               title="Move back"
                             >
@@ -178,12 +221,13 @@ export const TasksPage: React.FC = () => {
                           )}
                           {col.status !== "done" && (
                             <button
-                              onClick={() =>
+                              onClick={(e) => {
+                                e.stopPropagation();
                                 handleStatusChange(
                                   task.id,
                                   col.status === "todo" ? "doing" : "done"
-                                )
-                              }
+                                );
+                              }}
                               className="p-1 rounded text-xs text-surface-400 hover:bg-surface-700 cursor-pointer"
                               title="Move forward"
                             >
@@ -191,7 +235,10 @@ export const TasksPage: React.FC = () => {
                             </button>
                           )}
                           <button
-                            onClick={() => handleDelete(task.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(task.id);
+                            }}
                             className="p-1 rounded text-surface-400 hover:text-red-400 hover:bg-red-500/10 cursor-pointer"
                           >
                             <Trash2 size={14} />
@@ -280,6 +327,73 @@ export const TasksPage: React.FC = () => {
               Cancel
             </Button>
             <Button type="submit">Create Task</Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Edit Task Modal */}
+      <Modal
+        isOpen={!!editingTaskId && !!editingTask}
+        onClose={() => setEditingTaskId(null)}
+        title={editingTask ? `Edit: ${editingTask.title}` : "Edit Task"}
+      >
+        <form onSubmit={handleSaveEdit} className="space-y-5">
+          <div className="space-y-1.5">
+            <label className="block text-sm font-medium text-surface-300">
+              Description
+            </label>
+            <textarea
+              className="w-full rounded-xl bg-surface-800/50 border border-surface-700 text-surface-100 placeholder-surface-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all duration-200 px-4 py-2.5 text-sm min-h-[80px] resize-y"
+              placeholder="Optional details..."
+              value={editDescription}
+              onChange={(e) => setEditDescription(e.target.value)}
+            />
+          </div>
+          <Input
+            label="Deadline"
+            type="datetime-local"
+            value={editDeadline}
+            onChange={(e) => setEditDeadline(e.target.value)}
+          />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="block text-sm font-medium text-surface-300">
+                Priority
+              </label>
+              <select
+                className="w-full rounded-xl bg-surface-800/50 border border-surface-700 text-surface-100 focus:border-primary-500 focus:outline-none px-4 py-2.5 text-sm"
+                value={editPriority}
+                onChange={(e) => setEditPriority(e.target.value)}
+              >
+                <option value="1">🔴 High</option>
+                <option value="2">🟡 Medium</option>
+                <option value="3">🟢 Low</option>
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <label className="block text-sm font-medium text-surface-300">
+                Status
+              </label>
+              <select
+                className="w-full rounded-xl bg-surface-800/50 border border-surface-700 text-surface-100 focus:border-primary-500 focus:outline-none px-4 py-2.5 text-sm"
+                value={editStatus}
+                onChange={(e) => setEditStatus(e.target.value as TaskStatus)}
+              >
+                <option value="todo">To Do</option>
+                <option value="doing">In Progress</option>
+                <option value="done">Done</option>
+              </select>
+            </div>
+          </div>
+          <div className="flex gap-3 justify-end pt-2">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setEditingTaskId(null)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit">Save</Button>
           </div>
         </form>
       </Modal>

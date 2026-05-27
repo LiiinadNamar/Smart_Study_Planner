@@ -3,10 +3,12 @@
 import uuid
 from datetime import date
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.models.grade import Grade
+from app.models.grade_method import GradeMethod
 from app.models.subject import Subject
 from app.schemas.grade import GradeCreate, GradeForecastResponse
 
@@ -22,7 +24,12 @@ class GradeService:
         if not result.scalar_one_or_none():
             return []
 
-        stmt = select(Grade).where(Grade.subject_id == subject_id).order_by(Grade.date.desc())
+        stmt = (
+            select(Grade)
+            .options(selectinload(Grade.method))
+            .where(Grade.subject_id == subject_id)
+            .order_by(Grade.date.desc())
+        )
         result = await db.execute(stmt)
         return list(result.scalars().all())
 
@@ -35,17 +42,37 @@ class GradeService:
         if not subject:
             raise ValueError("Subject not found or not owned by user")
 
+        # Load method and verify it belongs to the subject
+        stmt = select(GradeMethod).where(
+            GradeMethod.id == data.method_id,
+            GradeMethod.subject_id == data.subject_id,
+        )
+        result = await db.execute(stmt)
+        method = result.scalar_one_or_none()
+        if not method:
+            raise ValueError("Grade method not found for this subject")
+
+        # Enforce planned_count limit
+        stmt = select(func.count(Grade.id)).where(Grade.method_id == method.id)
+        result = await db.execute(stmt)
+        existing_count = int(result.scalar_one() or 0)
+        if existing_count >= method.planned_count:
+            raise ValueError("Planned count for this method is already reached")
+
+        weight_per_item = float(method.weight_percent) / float(method.planned_count)
+
         grade = Grade(
             id=uuid.uuid4(),
             score=data.score,
-            weight=data.weight,
+            weight=weight_per_item,
             label=data.label,
             date=data.date,
             subject_id=data.subject_id,
+            method_id=method.id,
         )
         db.add(grade)
         await db.flush()
-        await db.refresh(grade)
+        await db.refresh(grade, attribute_names=["method"])
         return grade
 
     async def delete(self, db: AsyncSession, grade_id: uuid.UUID, user_id: uuid.UUID) -> bool:

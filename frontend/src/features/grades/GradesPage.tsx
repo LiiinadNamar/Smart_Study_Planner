@@ -10,13 +10,27 @@ import { useSubjectStore } from "../../store/subjectStore";
 import toast from "react-hot-toast";
 
 export const GradesPage: React.FC = () => {
-  const { grades, forecast, isLoading, fetch, create, remove, fetchForecast } =
-    useGradeStore();
+  const {
+    grades,
+    forecast,
+    methods,
+    isLoading,
+    fetch,
+    create,
+    remove,
+    fetchForecast,
+    fetchMethods,
+    createMethod,
+  } = useGradeStore();
   const { subjects, fetch: fetchSubjects } = useSubjectStore();
   const [selectedSubject, setSelectedSubject] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [methodId, setMethodId] = useState("");
+  const [creatingMethod, setCreatingMethod] = useState(false);
+  const [methodName, setMethodName] = useState("");
+  const [methodWeight, setMethodWeight] = useState("");
+  const [methodPlannedCount, setMethodPlannedCount] = useState("");
   const [score, setScore] = useState("");
-  const [weight, setWeight] = useState("");
   const [label, setLabel] = useState("");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
 
@@ -28,6 +42,7 @@ export const GradesPage: React.FC = () => {
     if (selectedSubject) {
       fetch(selectedSubject);
       fetchForecast(selectedSubject);
+      fetchMethods(selectedSubject);
     }
   }, [selectedSubject]);
 
@@ -41,17 +56,38 @@ export const GradesPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      let finalMethodId = methodId;
+      if (!finalMethodId) {
+        if (!creatingMethod) {
+          toast.error("Select a method first");
+          return;
+        }
+
+        const created = await createMethod({
+          subject_id: selectedSubject,
+          name: methodName,
+          weight_percent: parseFloat(methodWeight),
+          planned_count: parseInt(methodPlannedCount, 10),
+        });
+        finalMethodId = created.id;
+        setMethodId(created.id);
+      }
+
       await create({
         score: parseFloat(score),
-        weight: parseFloat(weight),
+        method_id: finalMethodId,
         label: label || undefined,
         date,
         subject_id: selectedSubject,
       });
       toast.success("Grade added");
       setShowModal(false);
+      setMethodId("");
+      setCreatingMethod(false);
+      setMethodName("");
+      setMethodWeight("");
+      setMethodPlannedCount("");
       setScore("");
-      setWeight("");
       setLabel("");
       fetchForecast(selectedSubject);
     } catch (err: any) {
@@ -232,6 +268,9 @@ export const GradesPage: React.FC = () => {
                   <thead>
                     <tr className="text-left border-b border-surface-700">
                       <th className="py-3 px-2 text-surface-400 font-medium">
+                        Method
+                      </th>
+                      <th className="py-3 px-2 text-surface-400 font-medium">
                         Label
                       </th>
                       <th className="py-3 px-2 text-surface-400 font-medium">
@@ -253,6 +292,9 @@ export const GradesPage: React.FC = () => {
                         className="border-b border-surface-800 hover:bg-surface-800/30 transition-colors"
                       >
                         <td className="py-3 px-2 text-surface-200">
+                          {grade.method?.name || "—"}
+                        </td>
+                        <td className="py-3 px-2 text-surface-300">
                           {grade.label || "—"}
                         </td>
                         <td className="py-3 px-2">
@@ -299,9 +341,80 @@ export const GradesPage: React.FC = () => {
         title="Add Grade"
       >
         <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="space-y-1.5">
+            <label className="block text-sm font-medium text-surface-300">
+              Method
+            </label>
+            <select
+              className="w-full rounded-xl bg-surface-800/50 border border-surface-700 text-surface-100 focus:border-primary-500 focus:outline-none px-4 py-2.5 text-sm"
+              value={methodId}
+              onChange={(e) => {
+                setMethodId(e.target.value);
+                if (e.target.value) setCreatingMethod(false);
+              }}
+              disabled={creatingMethod}
+            >
+              <option value="">Select method…</option>
+              {methods.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.name} ({m.weight_percent}%, {m.planned_count}x)
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-surface-500">
+              Create a new method if it doesn't exist yet.
+            </p>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setCreatingMethod((v) => !v);
+                setMethodId("");
+              }}
+            >
+              {creatingMethod ? "Use Existing" : "New Method"}
+            </Button>
+          </div>
+
+          {creatingMethod && (
+            <div className="space-y-4 rounded-xl border border-surface-700 bg-surface-800/30 p-4">
+              <Input
+                label="Method Name"
+                placeholder="e.g. Quizzes"
+                value={methodName}
+                onChange={(e) => setMethodName(e.target.value)}
+                required
+              />
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="Planned Count"
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={methodPlannedCount}
+                  onChange={(e) => setMethodPlannedCount(e.target.value)}
+                  required
+                />
+                <Input
+                  label="Weight (%)"
+                  type="number"
+                  min="0.1"
+                  max="100"
+                  step="0.1"
+                  value={methodWeight}
+                  onChange={(e) => setMethodWeight(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+          )}
+
           <Input
-            label="Label"
-            placeholder="e.g. Midterm Exam"
+            label="Assessment Label (optional)"
+            placeholder="e.g. Quiz 1"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
           />
@@ -316,16 +429,14 @@ export const GradesPage: React.FC = () => {
               onChange={(e) => setScore(e.target.value)}
               required
             />
-            <Input
-              label="Weight (%)"
-              type="number"
-              min="0.1"
-              max="100"
-              step="0.1"
-              value={weight}
-              onChange={(e) => setWeight(e.target.value)}
-              required
-            />
+            <div className="space-y-1.5">
+              <label className="block text-sm font-medium text-surface-300">
+                Weight
+              </label>
+              <div className="w-full rounded-xl bg-surface-800/50 border border-surface-700 text-surface-300 px-4 py-2.5 text-sm">
+                Auto (from method)
+              </div>
+            </div>
           </div>
           <Input
             label="Date"
