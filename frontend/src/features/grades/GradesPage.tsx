@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Plus, Trash2, TrendingUp, Target } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import { PageLayout } from "../../components/layout/PageLayout";
 import { Card } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
@@ -23,6 +24,7 @@ export const GradesPage: React.FC = () => {
     createMethod,
   } = useGradeStore();
   const { subjects, fetch: fetchSubjects } = useSubjectStore();
+  const [searchParams] = useSearchParams();
   const [selectedSubject, setSelectedSubject] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [methodId, setMethodId] = useState("");
@@ -46,10 +48,15 @@ export const GradesPage: React.FC = () => {
     }
   }, [selectedSubject]);
 
-  // Auto-select first subject
+  // Auto-select subject from URL param or fall back to first
   useEffect(() => {
     if (subjects.length > 0 && !selectedSubject) {
-      setSelectedSubject(subjects[0].id);
+      const urlSubjectId = searchParams.get("subject_id");
+      if (urlSubjectId && subjects.some((s) => s.id === urlSubjectId)) {
+        setSelectedSubject(urlSubjectId);
+      } else {
+        setSelectedSubject(subjects[0].id);
+      }
     }
   }, [subjects]);
 
