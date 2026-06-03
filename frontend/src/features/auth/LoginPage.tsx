@@ -53,6 +53,7 @@ export const LoginPage: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               icon={<Mail size={18} />}
+              hideIconOnInput
               required
             />
             <Input
@@ -62,6 +63,7 @@ export const LoginPage: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               icon={<Lock size={18} />}
+              hideIconOnInput
               required
             />
             <Button

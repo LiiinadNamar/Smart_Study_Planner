@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
-import ReactMarkdown from "react-markdown";
 import { Modal } from "../../components/ui/Modal";
 import { Card } from "../../components/ui/Card";
+import { MarkdownRenderer } from "../../components/ui/MarkdownRenderer";
 import type { LibraryItem, QuizQuestion, RoadmapStep } from "../../types";
 
 interface ContentModalProps {
@@ -95,46 +95,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ item, isOpen, onClos
       )}
 
       {item.type === "note" && (
-        <div className="max-h-[70vh] overflow-y-auto pr-1 text-surface-300 text-sm leading-relaxed">
-          <ReactMarkdown
-            components={{
-              h1: ({ children }) => <h1 className="text-xl font-bold text-surface-100 mb-3">{children}</h1>,
-              h2: ({ children }) => <h2 className="text-lg font-semibold text-surface-100 mt-4 mb-2">{children}</h2>,
-              h3: ({ children }) => <h3 className="text-base font-semibold text-surface-100 mt-3 mb-2">{children}</h3>,
-              p: ({ children }) => <p className="mb-3">{children}</p>,
-              ul: ({ children }) => <ul className="list-disc pl-5 mb-3 space-y-1">{children}</ul>,
-              ol: ({ children }) => <ol className="list-decimal pl-5 mb-3 space-y-1">{children}</ol>,
-              li: ({ children }) => <li className="text-surface-300">{children}</li>,
-              a: ({ children, href }) => (
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-primary-300 hover:text-primary-200 underline"
-                >
-                  {children}
-                </a>
-              ),
-              code: ({ children }) => (
-                <code className="px-1.5 py-0.5 rounded bg-surface-800/60 border border-surface-700 text-surface-100">
-                  {children}
-                </code>
-              ),
-              pre: ({ children }) => (
-                <pre className="p-3 rounded-xl bg-surface-900/40 border border-surface-700 overflow-x-auto mb-3">
-                  {children}
-                </pre>
-              ),
-              blockquote: ({ children }) => (
-                <blockquote className="border-l-4 border-surface-600 pl-3 text-surface-400 italic mb-3">
-                  {children}
-                </blockquote>
-              ),
-            }}
-          >
-            {item.content || ""}
-          </ReactMarkdown>
-        </div>
+        <MarkdownRenderer content={item.content || ""} className="max-h-[70vh] overflow-y-auto pr-1" />
       )}
     </Modal>
   );

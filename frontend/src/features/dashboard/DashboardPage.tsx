@@ -270,13 +270,13 @@ export const DashboardPage: React.FC = () => {
               </span>
             </div>
             {upcomingTasks.length === 0 ? (
-              <div className="py-6 text-center">
+              <div className="py-6 px-2 text-center">
                 <p className="text-surface-500 text-sm">
                   No upcoming tasks this week 🎉
                 </p>
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-2 px-2">
                 {upcomingTasks.slice(0, 5).map((task) => (
                   <div
                     key={task.id}

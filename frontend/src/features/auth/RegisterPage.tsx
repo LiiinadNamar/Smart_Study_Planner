@@ -51,6 +51,7 @@ export const RegisterPage: React.FC = () => {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               icon={<User size={18} />}
+              hideIconOnInput
               required
             />
             <Input
@@ -60,6 +61,7 @@ export const RegisterPage: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               icon={<Mail size={18} />}
+              hideIconOnInput
               required
             />
             <Input
@@ -69,6 +71,7 @@ export const RegisterPage: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               icon={<Lock size={18} />}
+              hideIconOnInput
               minLength={6}
               required
             />

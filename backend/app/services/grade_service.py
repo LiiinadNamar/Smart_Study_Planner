@@ -135,7 +135,7 @@ class GradeService:
                 subject_title=subject.title,
                 target_grade=subject.target_grade,
                 current_weighted_average=round(current_avg, 2),
-                total_weight_used=total_weight,
+                total_weight_used=round(total_weight, 2),
                 remaining_weight=0.0,
                 required_score=None,
                 is_achievable=is_achievable,
@@ -151,19 +151,23 @@ class GradeService:
 
         is_achievable = 0 <= required_score <= 100
 
+        required_score_display = round(required_score, 2)
+
         if required_score < 0:
-            message = f"You've already exceeded your target of {subject.target_grade}! Keep it up!"
+            message = (
+                f"You've already exceeded your target of {subject.target_grade:.2f}! Keep it up!"
+            )
             required_score = 0.0
             is_achievable = True
         elif required_score > 100:
             message = (
-                f"You need {required_score:.1f}% on remaining assessments, "
-                f"which exceeds 100%. Target of {subject.target_grade} may not be reachable."
+                f"You need {required_score_display:.2f}% on remaining assessments, "
+                f"which exceeds 100%. Target of {subject.target_grade:.2f} may not be reachable."
             )
         else:
             message = (
-                f"You need an average of {required_score:.1f}% on the remaining "
-                f"{remaining_weight:.0f}% of assessments to reach your target of {subject.target_grade}."
+                f"You need an average of {required_score_display:.2f}% on the remaining "
+                f"{remaining_weight:.2f}% of assessments to reach your target of {subject.target_grade:.2f}."
             )
 
         return GradeForecastResponse(
@@ -171,8 +175,8 @@ class GradeService:
             subject_title=subject.title,
             target_grade=subject.target_grade,
             current_weighted_average=round(current_avg, 2),
-            total_weight_used=total_weight,
-            remaining_weight=remaining_weight,
+            total_weight_used=round(total_weight, 2),
+            remaining_weight=round(remaining_weight, 2),
             required_score=round(required_score, 2),
             is_achievable=is_achievable,
             message=message,

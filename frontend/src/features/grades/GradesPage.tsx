@@ -113,6 +113,11 @@ export const GradesPage: React.FC = () => {
 
   const currentSubject = subjects.find((s) => s.id === selectedSubject);
 
+  const formatPercent = (value: number | null | undefined) => {
+    if (value === null || value === undefined || Number.isNaN(value)) return "—";
+    return value.toFixed(2);
+  };
+
   return (
     <PageLayout
       title="Grade Tracker"
@@ -166,7 +171,7 @@ export const GradesPage: React.FC = () => {
               <div className="space-y-4">
                 <div className="text-center py-4">
                   <p className="text-4xl font-bold gradient-text">
-                    {forecast.current_weighted_average}%
+                    {formatPercent(forecast.current_weighted_average)}%
                   </p>
                   <p className="text-sm text-surface-400 mt-1">
                     Current Average
@@ -177,19 +182,19 @@ export const GradesPage: React.FC = () => {
                   <div className="flex justify-between">
                     <span className="text-surface-400">Target</span>
                     <span className="text-surface-200 font-medium">
-                      {forecast.target_grade}%
+                      {formatPercent(forecast.target_grade)}%
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-surface-400">Weight Used</span>
                     <span className="text-surface-200 font-medium">
-                      {forecast.total_weight_used}%
+                      {formatPercent(forecast.total_weight_used)}%
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-surface-400">Remaining</span>
                     <span className="text-surface-200 font-medium">
-                      {forecast.remaining_weight}%
+                      {formatPercent(forecast.remaining_weight)}%
                     </span>
                   </div>
                   {forecast.required_score !== null && (
@@ -202,7 +207,7 @@ export const GradesPage: React.FC = () => {
                             : "text-danger"
                         }`}
                       >
-                        {forecast.required_score}%
+                        {formatPercent(forecast.required_score)}%
                       </span>
                     </div>
                   )}
@@ -314,11 +319,11 @@ export const GradesPage: React.FC = () => {
                                 : "text-danger"
                             }`}
                           >
-                            {grade.score}%
+                            {formatPercent(grade.score)}%
                           </span>
                         </td>
                         <td className="py-3 px-2 text-surface-300">
-                          {grade.weight}%
+                          {formatPercent(grade.weight)}%
                         </td>
                         <td className="py-3 px-2 text-surface-400">
                           {grade.date}

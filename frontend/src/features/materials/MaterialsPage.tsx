@@ -3,6 +3,7 @@ import { Upload, FileText, Sparkles, Loader2, Brain, Clock, ChevronRight, Copy, 
 import { PageLayout } from "../../components/layout/PageLayout";
 import { Card } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
+import { MarkdownRenderer } from "../../components/ui/MarkdownRenderer";
 import { useSubjectStore } from "../../store/subjectStore";
 import api from "../../services/api";
 import toast from "react-hot-toast";
@@ -258,12 +259,10 @@ export const MaterialsPage: React.FC = () => {
                     </div>
                   </div>
                 )}
-                <div
-                  className="text-surface-300 text-sm leading-relaxed whitespace-pre-wrap"
-                  style={{ maxHeight: "600px", overflowY: "auto" }}
-                >
-                  {activeSummary}
-                </div>
+                <MarkdownRenderer
+                  content={activeSummary ?? ""}
+                  className="max-h-[600px] overflow-y-auto pr-1"
+                />
               </div>
             ) : (
               <div className="text-center py-16">
